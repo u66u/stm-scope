@@ -1,0 +1,18 @@
+# cabal
+dist-newstyle/
+dist-stm-scope/
+cabal.project.local*
+.ghc.environment.*
+
+# GHC build products
+*.o
+*.hi
+*.hie
+*.dyn_o
+*.dyn_hi
+*.eventlog
+
+# fixture reports, spike binaries and build logs
+fixtures/out/
+spikes/*/s[0-9]-*
+spikes/*/*.log

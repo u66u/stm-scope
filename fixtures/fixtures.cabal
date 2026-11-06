@@ -1,0 +1,61 @@
+cabal-version: 3.0
+name:          fixtures
+version:       0
+synopsis:      Programs with one known STM pathology each; check.sh asserts stm-scope names it
+build-type:    Simple
+
+common fx
+  default-language: GHC2021
+  default-extensions: LambdaCase
+  hs-source-dirs:   src
+  ghc-options:      -O2 -Wall -threaded "-with-rtsopts=-N4"
+  build-depends:    base, stm, containers
+  other-modules:    Fixture
+
+executable false-sharing
+  import:  fx
+  main-is: FalseSharing.hs
+
+executable hot-counter
+  import:  fx
+  main-is: HotCounter.hs
+
+executable long-reader
+  import:  fx
+  main-is: LongReader.hs
+
+executable herd
+  import:  fx
+  main-is: Herd.hs
+
+executable queue-wait
+  import:  fx
+  main-is: QueueWait.hs
+
+executable layout
+  import:        fx
+  main-is:       Layout.hs
+  build-depends: ghc-heap
+  ghc-options:   -Wno-unused-top-binds
+
+executable aba-flag
+  import:  fx
+  main-is: AbaFlag.hs
+
+executable orelse-exc
+  import:  fx
+  main-is: OrElseExc.hs
+
+executable helper-site
+  import:  fx
+  main-is: HelperSite.hs
+
+executable escalate
+  import:  fx
+  main-is: Escalate.hs
+  build-depends: array
+
+executable gc-watch
+  import:  fx
+  main-is: GcWatch.hs
+  build-depends: array

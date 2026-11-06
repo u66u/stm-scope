@@ -1,0 +1,16 @@
+/*
+ * The one hook that needs to run as STG code: atomically# is entered with the
+ * transaction's STM action in R1 and the caller's continuation on top of the
+ * Haskell stack. Both are handed to C, then control continues into the real
+ * primop exactly as if we had never been here.
+ */
+#include "Cmm.h"
+
+import stmscope_enter;
+import __real_stg_atomicallyzh;
+
+__wrap_stg_atomicallyzh ( P_ stm )
+{
+    ccall stmscope_enter(MyCapability() "ptr", CurrentTSO "ptr", stm "ptr", Sp "ptr");
+    jump __real_stg_atomicallyzh(stm);
+}

@@ -1,0 +1,10 @@
+#include "Cmm.h"
+
+import stmscope_on_atomically;
+import __real_stg_atomicallyzh;
+
+__wrap_stg_atomicallyzh ( P_ stm )
+{
+    ccall stmscope_on_atomically(MyCapability() "ptr", CurrentTSO "ptr", stm "ptr", Sp "ptr");
+    jump __real_stg_atomicallyzh(stm);
+}

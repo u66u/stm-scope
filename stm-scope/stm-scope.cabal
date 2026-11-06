@@ -1,0 +1,77 @@
+cabal-version:   3.0
+name:            stm-scope
+version:         0.1.0.0
+synopsis:        STM contention profiler for GHC: which TVar to split, and why
+description:
+  Links a small interposer into the RTS's STM entry points (no source changes),
+  records why each transaction attempt failed and which commit caused it, and
+  turns that into ranked layout advice. See PLAN.md.
+license:         MIT
+license-file:    LICENSE
+author:          u66u
+maintainer:      u66u
+category:        Concurrency, Development, Profiling
+build-type:      Simple
+tested-with:     GHC ==9.6.7 || ==9.14.1
+data-files:
+  rt/stmscope.c
+  rt/hook.cmm
+  facts/Facts.hs
+
+common lang
+  default-language: GHC2021
+  default-extensions:
+    LambdaCase
+    OverloadedStrings
+    RecordWildCards
+  ghc-options:      -Wall -Wcompat -Widentities -Wredundant-constraints
+  build-depends:    base >=4.18 && <5
+
+library
+  import:          lang
+  hs-source-dirs:  src
+  exposed-modules:
+    StmScope.Analyze
+    StmScope.Build
+    StmScope.Facts
+    StmScope.Json
+    StmScope.Report
+    StmScope.Verdict
+    StmScope.Wire
+  other-modules:   Paths_stm_scope
+  autogen-modules: Paths_stm_scope
+  build-depends:
+    , binary      >=0.8
+    , bytestring  >=0.11
+    , containers  >=0.6
+    , directory   >=1.3
+    , filepath    >=1.4
+    , ghc-events  >=0.19
+    , process     >=1.6
+    , text        >=2.0
+
+executable stm-scope
+  import:         lang
+  hs-source-dirs: app
+  main-is:        Main.hs
+  ghc-options:    -threaded
+  build-depends:
+    , containers
+    , directory
+    , filepath
+    , optparse-applicative  >=0.17
+    , process
+    , stm-scope
+    , text
+
+test-suite unit
+  import:         lang
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is:        Unit.hs
+  build-depends:
+    , binary
+    , bytestring
+    , containers
+    , stm-scope
+    , text
